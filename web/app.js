@@ -9,6 +9,10 @@ app.get("/", (req, res) => {
     res.render("index");
 });
 
+app.post("/", (req, res) =>{
+    res.render("index");
+});
+
 // initialize server
 app.listen(3000, () => {
     console.log("Server is up");

@@ -7,12 +7,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.group.mysa.R;
+
+import org.w3c.dom.Text;
 
 /**
  * @author jesusnieto
@@ -24,6 +27,7 @@ public class SignInActivity extends AppCompatActivity {
     private EditText email;
     private EditText password;
     private FirebaseAuth mAuth;
+    private TextView signUpErrorMessage;
 
 
 
@@ -36,6 +40,7 @@ public class SignInActivity extends AppCompatActivity {
         signIn_signUp = (Button) findViewById(R.id.sign_in_signUp_button);
         email = (EditText) findViewById(R.id.sign_in_email_textField);
         password = (EditText) findViewById(R.id.sign_in_password_textField);
+        signUpErrorMessage = (TextView) findViewById(R.id.sign_up_error_message);
         mAuth = FirebaseAuth.getInstance();  //creates instance to connect to database auth
 
         logInHandle(signIn);
@@ -79,8 +84,8 @@ public class SignInActivity extends AppCompatActivity {
 
                             // switch view
                         }else {
-                            System.out.println("------------------------------------error");
-                            // prompt some error sign
+                            System.out.println("INCORRECT EMAIL AND PASSWORD!");
+                            signUpErrorMessage.setVisibility(1);
                         }
                     }
                 });

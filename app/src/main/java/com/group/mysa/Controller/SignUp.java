@@ -113,7 +113,8 @@ public class SignUp extends AppCompatActivity {
 
                 }else {
                     System.out.println("-----------------------User exists already");
-                    //prompts an error message
+                    signUpErrorMessage.setText("User Already Exists!");
+                    signUpErrorMessage.setVisibility(1);
                 }
 
             }

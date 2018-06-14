@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -28,6 +29,7 @@ public class SignUp extends AppCompatActivity {
     private EditText confirmPassword;
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
+    private TextView signUpErrorMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,7 @@ public class SignUp extends AppCompatActivity {
         email = (EditText) findViewById(R.id.sign_up_emailTextField);
         password = (EditText) findViewById(R.id.sign_up_passwordTextField);
         confirmPassword = (EditText) findViewById(R.id.sign_up_confirmPasswordTextField);
+        signUpErrorMessage = (TextView) findViewById(R.id.sign_up_error_message);
         mAuth = FirebaseAuth.getInstance();
 
         signUpHandle(createAccount);
@@ -70,11 +73,15 @@ public class SignUp extends AppCompatActivity {
                         createAccount();
                     }else{
                         System.out.println("-------------Passwords do not match");
+                        signUpErrorMessage.setText("Passwords Do Not Match!");
+                        signUpErrorMessage.setVisibility(1);
 
                     }
 
                 }else{
                     System.out.println("-------------one of the fields was empty");
+                    signUpErrorMessage.setText("Missing Fields");
+                    signUpErrorMessage.setVisibility(1);
                 }
 
             }

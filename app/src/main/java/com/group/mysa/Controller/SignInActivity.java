@@ -27,7 +27,7 @@ public class SignInActivity extends AppCompatActivity {
     private EditText email;
     private EditText password;
     private FirebaseAuth mAuth;
-    private TextView signUpErrorMessage;
+    private TextView signInErrorMessage;
 
 
 
@@ -40,7 +40,7 @@ public class SignInActivity extends AppCompatActivity {
         signIn_signUp = (Button) findViewById(R.id.sign_in_signUp_button);
         email = (EditText) findViewById(R.id.sign_in_email_textField);
         password = (EditText) findViewById(R.id.sign_in_password_textField);
-        signUpErrorMessage = (TextView) findViewById(R.id.sign_up_error_message);
+        signInErrorMessage = (TextView) findViewById(R.id.sign_up_error_message);
         mAuth = FirebaseAuth.getInstance();  //creates instance to connect to database auth
 
         logInHandle(signIn);
@@ -85,7 +85,7 @@ public class SignInActivity extends AppCompatActivity {
                             // switch view
                         }else {
                             System.out.println("INCORRECT EMAIL AND PASSWORD!");
-                            signUpErrorMessage.setVisibility(1);
+                            signInErrorMessage.setVisibility(1);
                         }
                     }
                 });

@@ -76,7 +76,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Incorrect Email & Password Combination"
+        android:text="Incorrect Email and Password Combination"
         android:textColor="?attr/colorError"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/sign_in_button"

@@ -5,6 +5,9 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 
+/**
+ * @author jesusnieto
+ */
 public class Database {
     private static DatabaseReference mDatabase;
 

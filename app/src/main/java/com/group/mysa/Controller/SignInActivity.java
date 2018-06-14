@@ -73,6 +73,10 @@ public class SignInActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             System.out.println("------------------------------------Logged in works");
+                            Intent startIntent = new Intent(SignInActivity.this, MainAppHomeActivity.class);
+                            startActivity(startIntent);
+                            finish();
+
                             // switch view
                         }else {
                             System.out.println("------------------------------------error");

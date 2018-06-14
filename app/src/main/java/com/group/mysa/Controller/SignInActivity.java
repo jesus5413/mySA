@@ -1,5 +1,6 @@
 package com.group.mysa.Controller;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import com.group.mysa.R;
 public class SignInActivity extends AppCompatActivity {
 
     private Button signIn;
+    private Button signIn_signUp;
     private EditText email;
     private EditText password;
     private FirebaseAuth mAuth;
@@ -31,11 +33,13 @@ public class SignInActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_in);
 
         signIn = (Button) findViewById(R.id.sign_in_button);
+        signIn_signUp = (Button) findViewById(R.id.sign_in_signUp_button);
         email = (EditText) findViewById(R.id.sign_in_email_textField);
         password = (EditText) findViewById(R.id.sign_in_password_textField);
         mAuth = FirebaseAuth.getInstance();  //creates instance to connect to database auth
 
         logInHandle(signIn);
+        changeToSignUpView(signIn_signUp);
 
     }
 
@@ -76,6 +80,24 @@ public class SignInActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+
+    /**
+     * Functions takes user to sign up view to create an account.
+     * @param button
+     */
+    private void changeToSignUpView(Button button){
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("------------Sign Up button clicked");
+                Intent startIntent = new Intent(SignInActivity.this, SignUp.class);
+                startActivity(startIntent);
+
+            }
+        });
+
     }
 
 

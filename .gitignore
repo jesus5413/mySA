@@ -9,3 +9,4 @@
 /captures
 .externalNativeBuild
 /web/node_modules
+/web/.env

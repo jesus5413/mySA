@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const firebase = require("firebase");
 const bodyParser = require("body-parser");
@@ -6,10 +7,10 @@ const path = require("path");
 
 // firebase configuration
 let config = {
-    apiKey: "AIzaSyDfSRGfcX-Xq-ynQENEeZtO2IjU9MN3WZM",
-    authDomain: "mysa-734b1.firebaseapp.com",
-    databaseURL: "https://mysa-734b1.firebaseio.com/",
-    storageBucket: "mysa-734b1.appspot.com"
+    apiKey: process.env.API_KEY,
+    authDomain: process.env.AUTH_DOMAIN,
+    databaseURL: process.env.DATABASE_URL,
+    storageBucket: process.env.STORAGE_BUCKET
 };
 
 firebase.initializeApp(config);
@@ -22,7 +23,7 @@ function authenticate(email, password){
         let errorCode = err.code;
         let errorMessage = err.message;
     
-        alert("Error");
+        console.log("can't sign in");
     });
 };
 

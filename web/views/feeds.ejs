@@ -50,6 +50,17 @@
     </div>
 </div>
 
-<a href="/create">Create new item</a>
+<div id="add-form">
+    <form action="/feeds" method="POST">
+        <input type="text" name="title" placeholder="title">
+        <!-- Using links until image upload is implemented later -->
+        <input type="text" name="image" placeholder="image">
+        <input type="text" name="description" placeholder="description">
+        <input type="number" name="score" placeholder="score">
+        <input type="date" name="date">
+        <!-- <input type="submit" value="Submit" id="submit"> -->
+        <button id="feed-butt" onclick="addNewItem">Submit</button>
+    </form>
+</div>
 
 <% include partials/footer %>

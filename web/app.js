@@ -19,7 +19,6 @@ authenticate("testmail2@gmail.com", "Password");
 
 function authenticate(email, password){
     firebase.auth().signInWithEmailAndPassword(email, password).catch((err) => {
-        // error
         let errorCode = err.code;
         let errorMessage = err.message;
     
@@ -30,13 +29,6 @@ function authenticate(email, password){
 firebase.auth().onAuthStateChanged((user) => {
     if(user){
         console.log("Signed in");
-
-        // // Write to database on click
-        let database = firebase.database(); // gets reference to database service
-        let feedRef = database.ref("feed");
-        // let addButt = document.getElementById("feed-butt");
-
-        // databaseModule.addNewItem(database, feedRef, addButt);
     }
 });
 
@@ -53,7 +45,13 @@ app.get("/", (req, res) => {
 });
 
 app.get("/feeds", (req, res) => {
-    res.render("feeds");
+    // retrieve all items from db
+    let database = firebase.database();
+    let feedRef = database.ref("feed");
+    
+    feedRef.on("value", (snapshot) => {
+        res.render("feeds", { posts: snapshot });
+    });
 });
 
 app.get("/create", (req, res) => {

@@ -2,54 +2,6 @@
 
 <h1>Feeds</h1>
 
-<!-- Give css overflow: scroll -->
-<div class="all">
-    <div class="item">
-        <div class="title">
-            <h2>Title of item</h2>
-        </div>
-
-        <div class="image">
-            <img src="/" alt="Fake picture">
-        </div>
-
-        <div class="description">
-            <p>Imagine some news going here.</p>
-            <p>50 points</p>
-        </div>
-    </div>
-
-    <div class="item">
-        <div class="title">
-            <h2>Title of item</h2>
-        </div>
-
-        <div class="image">
-            <img src="/" alt="Fake picture">
-        </div>
-
-        <div class="description">
-            <p>Imagine some news going here.</p>
-            <p>50 points</p>
-        </div>
-    </div>
-    
-    <div class="item">
-        <div class="title">
-            <h2>Title of item</h2>
-        </div>
-
-        <div class="image">
-            <img src="/" alt="Fake picture">
-        </div>
-
-        <div class="description">
-            <p>Imagine some news going here.</p>
-            <p>50 points</p>
-        </div>
-    </div>
-</div>
-
 <div id="add-form">
     <form action="/feeds" method="POST">
         <input type="text" name="title" placeholder="title">
@@ -62,5 +14,32 @@
         <button id="feed-butt" onclick="addNewItem">Submit</button>
     </form>
 </div>
+
+<!-- Give css overflow: scroll -->
+<!-- <div class="all"> -->
+    <% posts.forEach(((post) => { %>
+        <div class="item">
+            <div class="title">
+                <h2><%= post.val().title %></h2>
+            </div>
+
+            <!-- Will eventually show image, but only text for now -->
+            <div class="image">
+                <p><%= post.val().imgUrl %></p>
+            </div>
+
+            <div class="date">
+                <p><%= post.val().date %></p>
+            </div>
+
+            <div class="description">
+                <p><%= post.val().description %></p>
+            </div>
+
+            <div class="score">
+                <p><%= post.val().score %></p>
+            </div>
+        </div>
+    <% })) %>
 
 <% include partials/footer %>

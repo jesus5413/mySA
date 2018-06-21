@@ -23,6 +23,7 @@ function authenticate(email, password){
         let errorCode = err.code;
         let errorMessage = err.message;
     
+        console.log(errorMessage);
         console.log("can't sign in");
     });
 };
@@ -73,7 +74,7 @@ app.post("/feeds", (req, res) => {
     // this will actually write out all of the required items to that record
     newItem.set({
         title: req.body.title,
-        date: req.body.date,
+        date: req.body.date.toString(),
         score: req.body.score,
         imgUrl: req.body.image,
         description: req.body.description

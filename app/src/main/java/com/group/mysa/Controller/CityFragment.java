@@ -29,7 +29,7 @@ import com.squareup.picasso.Picasso;
  * to handle interaction events.
  * Use the {@link CityFragment#newInstance} factory method to
  * create an instance of this fragment.
- * @author jesusnieto 
+ * @author jesusnieto
  */
 public class CityFragment extends Fragment {
 //     TODO: Rename parameter arguments, choose names that match

@@ -51,13 +51,9 @@ app.get("/feeds", (req, res) => {
     let database = firebase.database();
     let feedRef = database.ref("feed");
     
-    feedRef.on("value", (snapshot) => {
+    feedRef.once("value", (snapshot) => {
         res.render("feeds", { posts: snapshot });
     });
-});
-
-app.get("/create", (req, res) => {
-    res.render("create");
 });
 
 // POST ROUTES
@@ -81,7 +77,11 @@ app.post("/feeds", (req, res) => {
     });
 
     console.log("added to db");
-    res.render("feeds");
+
+    // retrieve all items from db
+    feedRef.once("value", (snapshot) => {
+        res.render("feeds", { posts: snapshot });
+    });
 });
 
 // initialize server

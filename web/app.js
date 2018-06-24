@@ -40,23 +40,9 @@ function createUser(email, password){
         Password: password,
         role: "admin"
     }
-
-    console.log(newUserInfo);
 }
 
-// createUser("pur@hotmail.com", "Password");
-
-// authenticate("testmail2@gmail.com", "Password");
-
-function authenticate(email, password){
-    firebase.auth().signInWithEmailAndPassword(email, password).catch((err) => {
-        let errorCode = err.code;
-        let errorMessage = err.message;
-    
-        console.log(errorMessage);
-        console.log("can't sign in");
-    });
-};
+// createUser("pie34@hotmail.com", "Password");
 
 function checkIfNewUser(){
     let creatTime = firebase.auth().currentUser.metadata.creationTime
@@ -70,9 +56,9 @@ firebase.auth().onAuthStateChanged((user) => {
         console.log("Signed in");
         database = firebase.database();
         feedRef = database.ref("feed");
+        let usersRef = database.ref("users");
 
         if(checkIfNewUser()){
-            let usersRef = database.ref("users");
             let newUser = usersRef.push(); // pushes EMPTY record to database
         
             // this will actually write out all of the required items to that record
@@ -84,6 +70,20 @@ firebase.auth().onAuthStateChanged((user) => {
                 role: newUserInfo.role
             });
         }
+
+        // check for admin role
+        console.log("EMAILS");
+        let isAdmin = false;
+
+        usersRef.once("value").then((snapshot) => {
+            snapshot.forEach((user) => {
+                if(user.val().Email === firebase.auth().currentUser.email){
+                    if(user.val().role === "admin"){
+                        console.log("Is admin");
+                    }
+                }
+            });
+        });
     }
 });
 
@@ -106,12 +106,14 @@ app.get("/", (req, res) => {
     res.render("index");
 });
 
-app.get("/feeds", (req, res) => {
+// Only admin users should be able to access feeds
+app.get("/feeds", authModule.doesUserExist, (req, res) => {
     getFeedAndRender(res);
 });
 
 // POST ROUTES
-app.post("/", (req, res) => {
+// Only admin users should be able to access feeds
+app.post("/", authModule.doesUserExist, (req, res) => {
     res.render("index");
 });
 

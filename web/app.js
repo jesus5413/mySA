@@ -23,67 +23,68 @@ var config = {
 
 firebase.initializeApp(config);
 
-//dummy log in for now
-function createUser(email, password){
-    firebase.auth().createUserWithEmailAndPassword(email, password).catch(((error) => {
+function createUser(first, last, email, password, confirm){
+    if(password !== confirm){
+        console.log("Passwords don't match");
+        return;
+    }
+
+    firebase.auth().createUserWithEmailAndPassword(email, password).catch(((err) => {
         let errorCode = err.code;
         let errorMessage = err.message;
 
         console.log(errorMessage);
-        console.log("can't sign in"); 
+        console.log("can't create user"); 
     }));
 
     newUserInfo = {
-        FirstName: "Fernando",
-        LastName: "Renteria",
+        FirstName: first,
+        LastName: last,
         Email: email,
         Password: password,
         role: "admin"
     }
 }
 
-// createUser("pie34@hotmail.com", "Password");
+function checkIfNewUser(){
+    let creatTime = firebase.auth().currentUser.metadata.creationTime
+    let signInTime = firebase.auth().currentUser.metadata.lastSignInTime
 
-// function checkIfNewUser(){
-//     let creatTime = firebase.auth().currentUser.metadata.creationTime
-//     let signInTime = firebase.auth().currentUser.metadata.lastSignInTime
-
-//     return creatTime === signInTime;
-// }
+    return creatTime === signInTime;
+}
 
 firebase.auth().onAuthStateChanged((user) => {
     if(user){
-        // console.log("Signed in");
-        // database = firebase.database();
-        // feedRef = database.ref("feed");
-        // let usersRef = database.ref("users");
+        database = firebase.database();
+        feedRef = database.ref("feed");
+        let usersRef = database.ref("users");
 
-        // if(checkIfNewUser()){
-        //     let newUser = usersRef.push(); // pushes EMPTY record to database
+        if(checkIfNewUser()){
+            let newUser = usersRef.push(); // pushes EMPTY record to database
         
-        //     // this will actually write out all of the required items to that record
-        //     newUser.set({
-        //         FirstName: newUserInfo.FirstName,
-        //         LastName: newUserInfo.LastName,
-        //         Email: newUserInfo.Email,
-        //         Password: newUserInfo.Password,
-        //         role: newUserInfo.role
-        //     });
-        // }
+            // this will actually write out all of the required items to that record
+            newUser.set({
+                FirstName: newUserInfo.FirstName,
+                LastName: newUserInfo.LastName,
+                Email: newUserInfo.Email,
+                Password: newUserInfo.Password,
+                role: newUserInfo.role
+            });
+        }
 
         // check for admin role
-        // console.log("EMAILS");
-        // let isAdmin = false;
+        console.log("EMAILS");
+        let isAdmin = false;
 
-        // usersRef.once("value").then((snapshot) => {
-        //     snapshot.forEach((user) => {
-        //         if(user.val().Email === firebase.auth().currentUser.email){
-        //             if(user.val().role === "admin"){
-        //                 console.log("Is admin");
-        //             }
-        //         }
-        //     });
-        // });
+        usersRef.once("value").then((snapshot) => {
+            snapshot.forEach((user) => {
+                if(user.val().Email === firebase.auth().currentUser.email){
+                    if(user.val().role === "admin"){
+                        console.log("Is admin");
+                    }
+                }
+            });
+        });
         console.log("logged in");
     }else{
         console.log("not logged in");
@@ -112,6 +113,11 @@ app.get("/", (req, res) => {
     res.render("index");
 });
 
+// Register new user page
+app.get("/new_user", (req, res) => {
+    res.render("new_user");
+});
+
 // Only admin users should be able to access feeds
 app.get("/feeds", authModule.isUserAuthenticated, (req, res) => {
     getFeedAndRender(res);
@@ -119,7 +125,20 @@ app.get("/feeds", authModule.isUserAuthenticated, (req, res) => {
 
 // POST ROUTES
 // Only admin users should be able to access feeds
-app.post("/", authModule.doesUserExist, (req, res) => {
+app.post("/", authModule.login, (req, res) => {
+    getFeedAndRender(res);
+});
+
+// Actually create a new user
+app.post("/new_user", (req, res) => {
+    createUser(
+        req.body.first,
+        req.body.last,
+        req.body.email,
+        req.body.password,
+        req.body.confirm
+    );
+
     getFeedAndRender(res);
 });
 

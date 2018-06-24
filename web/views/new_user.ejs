@@ -1,0 +1,12 @@
+<% include partials/header %>
+
+<form action="/new_user" method="POST">
+    <input type="text" name="first" placeholder="First Name">
+    <input type="text" name="last" placeholder="Last Name">
+    <input type="text" name="email" placeholder="Email">
+    <input type="password" name="password" placeholder="Password">
+    <input type="password" name="confirm" placeholder="Confirm Password">
+    <button>Submit</button>
+</form>
+
+<% include partials/footer %>

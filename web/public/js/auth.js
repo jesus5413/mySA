@@ -2,7 +2,7 @@ const firebase = require("firebase");
 var middlewareObj = {};
 
 // check if user exists
-middlewareObj.doesUserExist = (req, res, next) => {
+middlewareObj.login = (req, res, next) => {
     let email = req.body.username;
     let password = req.body.password;
 
@@ -17,7 +17,7 @@ middlewareObj.isUserAuthenticated = (req, res, next) => {
         req.user = user;
         next();
     }else{
-        res.redirect("/");
+        res.redirect("index");
     }
 };
 

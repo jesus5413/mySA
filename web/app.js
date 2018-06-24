@@ -44,46 +44,49 @@ function createUser(email, password){
 
 // createUser("pie34@hotmail.com", "Password");
 
-function checkIfNewUser(){
-    let creatTime = firebase.auth().currentUser.metadata.creationTime
-    let signInTime = firebase.auth().currentUser.metadata.lastSignInTime
+// function checkIfNewUser(){
+//     let creatTime = firebase.auth().currentUser.metadata.creationTime
+//     let signInTime = firebase.auth().currentUser.metadata.lastSignInTime
 
-    return creatTime === signInTime;
-}
+//     return creatTime === signInTime;
+// }
 
 firebase.auth().onAuthStateChanged((user) => {
     if(user){
-        console.log("Signed in");
-        database = firebase.database();
-        feedRef = database.ref("feed");
-        let usersRef = database.ref("users");
+        // console.log("Signed in");
+        // database = firebase.database();
+        // feedRef = database.ref("feed");
+        // let usersRef = database.ref("users");
 
-        if(checkIfNewUser()){
-            let newUser = usersRef.push(); // pushes EMPTY record to database
+        // if(checkIfNewUser()){
+        //     let newUser = usersRef.push(); // pushes EMPTY record to database
         
-            // this will actually write out all of the required items to that record
-            newUser.set({
-                FirstName: newUserInfo.FirstName,
-                LastName: newUserInfo.LastName,
-                Email: newUserInfo.Email,
-                Password: newUserInfo.Password,
-                role: newUserInfo.role
-            });
-        }
+        //     // this will actually write out all of the required items to that record
+        //     newUser.set({
+        //         FirstName: newUserInfo.FirstName,
+        //         LastName: newUserInfo.LastName,
+        //         Email: newUserInfo.Email,
+        //         Password: newUserInfo.Password,
+        //         role: newUserInfo.role
+        //     });
+        // }
 
         // check for admin role
-        console.log("EMAILS");
-        let isAdmin = false;
+        // console.log("EMAILS");
+        // let isAdmin = false;
 
-        usersRef.once("value").then((snapshot) => {
-            snapshot.forEach((user) => {
-                if(user.val().Email === firebase.auth().currentUser.email){
-                    if(user.val().role === "admin"){
-                        console.log("Is admin");
-                    }
-                }
-            });
-        });
+        // usersRef.once("value").then((snapshot) => {
+        //     snapshot.forEach((user) => {
+        //         if(user.val().Email === firebase.auth().currentUser.email){
+        //             if(user.val().role === "admin"){
+        //                 console.log("Is admin");
+        //             }
+        //         }
+        //     });
+        // });
+        console.log("logged in");
+    }else{
+        console.log("not logged in");
     }
 });
 
@@ -96,6 +99,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // functions
 function getFeedAndRender(res){
+    database = firebase.database();
+    feedRef = database.ref("feed");
+    
     feedRef.once("value", (snapshot) => {
         res.render("feeds", { posts: snapshot });
     });
@@ -107,18 +113,18 @@ app.get("/", (req, res) => {
 });
 
 // Only admin users should be able to access feeds
-app.get("/feeds", authModule.doesUserExist, (req, res) => {
+app.get("/feeds", authModule.isUserAuthenticated, (req, res) => {
     getFeedAndRender(res);
 });
 
 // POST ROUTES
 // Only admin users should be able to access feeds
 app.post("/", authModule.doesUserExist, (req, res) => {
-    res.render("index");
+    getFeedAndRender(res);
 });
 
 // This will add new entry into the database 
-app.post("/feeds", (req, res) => {
+app.post("/feeds", authModule.isUserAuthenticated, (req, res) => {
     let newItem = feedRef.push(); // pushes EMPTY record to database
 
     // this will actually write out all of the required items to that record

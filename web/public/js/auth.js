@@ -5,11 +5,20 @@ var middlewareObj = {};
 middlewareObj.doesUserExist = (req, res, next) => {
     let email = req.body.username;
     let password = req.body.password;
-    
-    authenticate(email, password);
-    console.log("Looged in");
 
-    next();
+    authenticate(email, password);
+};
+
+// only let user on other pages if user is authenticated
+middlewareObj.isUserAuthenticated = (req, res, next) => {
+    let user = firebase.auth().currentUser;
+
+    if(user !== null){
+        req.user = user;
+        next();
+    }else{
+        res.redirect("/");
+    }
 };
 
 function authenticate(email, password){
@@ -21,7 +30,5 @@ function authenticate(email, password){
         console.log("can't sign in");
     });
 };
-
-
 
 module.exports = middlewareObj;

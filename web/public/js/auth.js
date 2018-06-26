@@ -1,12 +1,12 @@
 const firebase = require("firebase");
 var middlewareObj = {};
 
-// check if user exists
 middlewareObj.login = (req, res, next) => {
+    console.log("MIDDLEWARE LOGIN");
     let email = req.body.username;
     let password = req.body.password;
 
-    authenticate(email, password);
+    authenticate(email, password, next);
 };
 
 // only let user on other pages if user is authenticated
@@ -52,14 +52,18 @@ middlewareObj.checkIfNewUser = () => {
     return creatTime === signInTime;
 }
 
-function authenticate(email, password){
-    firebase.auth().signInWithEmailAndPassword(email, password).catch((err) => {
-        let errorCode = err.code;
-        let errorMessage = err.message;
-    
-        console.log(errorMessage);
-        console.log("can't sign in");
-    });
+function authenticate(email, password, next){
+    firebase.auth().signInWithEmailAndPassword(email, password)
+        .then((user) => {
+            next();
+        })
+        .catch((err) => {
+            let errorCode = err.code;
+            let errorMessage = err.message;
+        
+            console.log(errorMessage);
+            console.log("can't sign in");
+        });
 };
 
 module.exports = middlewareObj;

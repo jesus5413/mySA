@@ -7,8 +7,6 @@ router.get("/", (req, res) => {
 });
 
 router.post("/", authModule.login, (req, res) => {
-    console.log("IN POST /")
-    // getFeedAndRender(res);
     res.redirect("feeds");
 });
 

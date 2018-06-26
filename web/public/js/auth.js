@@ -52,6 +52,14 @@ middlewareObj.checkIfNewUser = () => {
     return creatTime === signInTime;
 }
 
+middlewareObj.logout = () => {
+    firebase.auth().signOut().then(() => {
+        console.log("logged out");
+    }).catch((err) => {
+        console.log(err);
+    });
+}
+
 function authenticate(email, password, next){
     firebase.auth().signInWithEmailAndPassword(email, password)
         .then((user) => {

@@ -14,4 +14,9 @@ router.get("/new_user", (req, res) => {
     res.render("new_user");
 });
 
+router.get("/logout", (req, res) => {
+    authModule.logout();
+    res.render("index");
+});
+
 module.exports = router;

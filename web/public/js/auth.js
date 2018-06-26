@@ -22,6 +22,36 @@ middlewareObj.isUserAuthenticated = (req, res, next) => {
     }
 };
 
+middlewareObj.createUser = (first, last, email, password, confirm) =>{
+    if(password !== confirm){
+        console.log("Passwords don't match");
+        return;
+    }
+
+    firebase.auth().createUserWithEmailAndPassword(email, password).catch(((err) => {
+        let errorCode = err.code;
+        let errorMessage = err.message;
+
+        console.log(errorMessage);
+        console.log("can't create user"); 
+    }));
+
+    return {
+        FirstName: first,
+        LastName: last,
+        Email: email,
+        Password: password,
+        role: "admin"
+    }
+}
+
+middlewareObj.checkIfNewUser = () => {
+    let creatTime = firebase.auth().currentUser.metadata.creationTime
+    let signInTime = firebase.auth().currentUser.metadata.lastSignInTime
+
+    return creatTime === signInTime;
+}
+
 function authenticate(email, password){
     firebase.auth().signInWithEmailAndPassword(email, password).catch((err) => {
         let errorCode = err.code;

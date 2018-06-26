@@ -7,7 +7,6 @@ const path = require("path");
 const databaseModule = require("./public/js/database.js");
 const authModule = require("./public/js/auth.js");
 
-
 // globabl variables
 var database;
 var feedRef;
@@ -23,43 +22,13 @@ var config = {
 
 firebase.initializeApp(config);
 
-function createUser(first, last, email, password, confirm){
-    if(password !== confirm){
-        console.log("Passwords don't match");
-        return;
-    }
-
-    firebase.auth().createUserWithEmailAndPassword(email, password).catch(((err) => {
-        let errorCode = err.code;
-        let errorMessage = err.message;
-
-        console.log(errorMessage);
-        console.log("can't create user"); 
-    }));
-
-    newUserInfo = {
-        FirstName: first,
-        LastName: last,
-        Email: email,
-        Password: password,
-        role: "admin"
-    }
-}
-
-function checkIfNewUser(){
-    let creatTime = firebase.auth().currentUser.metadata.creationTime
-    let signInTime = firebase.auth().currentUser.metadata.lastSignInTime
-
-    return creatTime === signInTime;
-}
-
 firebase.auth().onAuthStateChanged((user) => {
     if(user){
         database = firebase.database();
         feedRef = database.ref("feed");
         let usersRef = database.ref("users");
 
-        if(checkIfNewUser()){
+        if(authModule.checkIfNewUser()){
             let newUser = usersRef.push(); // pushes EMPTY record to database
         
             // this will actually write out all of the required items to that record
@@ -70,10 +39,11 @@ firebase.auth().onAuthStateChanged((user) => {
                 Password: newUserInfo.Password,
                 role: newUserInfo.role
             });
+
+            console.log("Added new user to db");
         }
 
         // check for admin role
-        debugger;
         // let isAdmin = false;
 
         // usersRef.once("value").then((snapshot) => {
@@ -127,14 +97,14 @@ app.get("/feeds", authModule.isUserAuthenticated, (req, res) => {
 // POST ROUTES
 // Only admin users should be able to access feeds
 app.post("/", authModule.login, (req, res) => {
-  console.log("IN POIST /")
+  console.log("IN POST /")
     // getFeedAndRender(res);
     res.redirect("feeds");
 });
 
 // Actually create a new user
 app.post("/new_user", (req, res) => {
-    createUser(
+    newUserInfo = authModule.createUser(
         req.body.first,
         req.body.last,
         req.body.email,
@@ -147,18 +117,7 @@ app.post("/new_user", (req, res) => {
 
 // This will add new entry into the database 
 app.post("/feeds", authModule.isUserAuthenticated, (req, res) => {
-    let newItem = feedRef.push(); // pushes EMPTY record to database
-
-    // this will actually write out all of the required items to that record
-    newItem.set({
-        title: req.body.title,
-        date: req.body.date.toString(),
-        score: req.body.score,
-        imgUrl: req.body.image,
-        description: req.body.description
-    });
-
-    console.log("added to db");
+    databaseModule.addItem(req.body, feedRef);
     getFeedAndRender(res);
 });
 

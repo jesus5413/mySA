@@ -12,12 +12,13 @@ middlewareObj.login = (req, res, next) => {
 // only let user on other pages if user is authenticated
 middlewareObj.isUserAuthenticated = (req, res, next) => {
     let user = firebase.auth().currentUser;
-
+    console.log("running isUserAuth");
     if(user !== null){
         req.user = user;
+        console.log("logged in from auth.js");
         next();
     }else{
-        res.redirect("index");
+        res.redirect("/");
     }
 };
 

@@ -73,18 +73,18 @@ firebase.auth().onAuthStateChanged((user) => {
         }
 
         // check for admin role
-        console.log("EMAILS");
-        let isAdmin = false;
+        debugger;
+        // let isAdmin = false;
 
-        usersRef.once("value").then((snapshot) => {
-            snapshot.forEach((user) => {
-                if(user.val().Email === firebase.auth().currentUser.email){
-                    if(user.val().role === "admin"){
-                        console.log("Is admin");
-                    }
-                }
-            });
-        });
+        // usersRef.once("value").then((snapshot) => {
+        //     snapshot.forEach((user) => {
+        //         if(user.val().Email === firebase.auth().currentUser.email){
+        //             if(user.val().role === "admin"){
+        //                 console.log("Is admin");
+        //             }
+        //         }
+        //     });
+        // });
         console.log("logged in");
     }else{
         console.log("not logged in");
@@ -100,6 +100,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // functions
 function getFeedAndRender(res){
+    console.log("IN GET FEEDS");
     database = firebase.database();
     feedRef = database.ref("feed");
     
@@ -126,7 +127,9 @@ app.get("/feeds", authModule.isUserAuthenticated, (req, res) => {
 // POST ROUTES
 // Only admin users should be able to access feeds
 app.post("/", authModule.login, (req, res) => {
-    getFeedAndRender(res);
+  console.log("IN POIST /")
+    // getFeedAndRender(res);
+    res.redirect("feeds");
 });
 
 // Actually create a new user

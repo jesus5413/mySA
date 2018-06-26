@@ -7,6 +7,10 @@ const path = require("path");
 const databaseModule = require("./public/js/database.js");
 const authModule = require("./public/js/auth.js");
 
+// routes
+const indexRoutes = require("./routes/index.js");
+// const feedsRoutes = require("./routes/feeds.js");
+
 // globabl variables
 var database;
 var feedRef;
@@ -67,6 +71,8 @@ let app = express();
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "/public")));
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use("/", indexRoutes);
+// app.use("/feeds", feedsRoutes);
 
 // functions
 function getFeedAndRender(res){
@@ -80,28 +86,12 @@ function getFeedAndRender(res){
 }
 
 // GET ROUTES
-app.get("/", (req, res) => {
-    res.render("index");
-});
-
-// Register new user page
-app.get("/new_user", (req, res) => {
-    res.render("new_user");
-});
-
 // Only admin users should be able to access feeds
 app.get("/feeds", authModule.isUserAuthenticated, (req, res) => {
     getFeedAndRender(res);
 });
 
 // POST ROUTES
-// Only admin users should be able to access feeds
-app.post("/", authModule.login, (req, res) => {
-  console.log("IN POST /")
-    // getFeedAndRender(res);
-    res.redirect("feeds");
-});
-
 // Actually create a new user
 app.post("/new_user", (req, res) => {
     newUserInfo = authModule.createUser(

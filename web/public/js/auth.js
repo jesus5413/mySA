@@ -2,7 +2,6 @@ const firebase = require("firebase");
 var middlewareObj = {};
 
 middlewareObj.login = (req, res, next) => {
-    console.log("MIDDLEWARE LOGIN");
     let email = req.body.username;
     let password = req.body.password;
 
@@ -12,10 +11,8 @@ middlewareObj.login = (req, res, next) => {
 // only let user on other pages if user is authenticated
 middlewareObj.isUserAuthenticated = (req, res, next) => {
     let user = firebase.auth().currentUser;
-    console.log("running isUserAuth");
     if(user !== null){
         req.user = user;
-        console.log("logged in from auth.js");
         next();
     }else{
         res.redirect("/");
@@ -60,6 +57,20 @@ middlewareObj.logout = () => {
     });
 }
 
+middlewareObj.checkForAdmin = (usersRef, res) => {
+    usersRef.once("value").then((snapshot) => {
+        snapshot.forEach((user) => {
+            if(user.val().Email === firebase.auth().currentUser.email){
+                if(user.val().role === "admin"){
+                    console.log("Is admin");
+                }else{
+                   return  res.redirect("logout");
+                }
+            }
+        });
+    });
+}
+
 function authenticate(email, password, next){
     firebase.auth().signInWithEmailAndPassword(email, password)
         .then((user) => {
@@ -72,6 +83,8 @@ function authenticate(email, password, next){
             console.log(errorMessage);
             console.log("can't sign in");
         });
+    
+    console.log("authenticate");
 };
 
 module.exports = middlewareObj;

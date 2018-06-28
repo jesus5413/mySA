@@ -14,6 +14,7 @@ const indexRoutes = require("./routes/index.js");
 // globabl variables
 var database;
 var feedRef;
+var usersRef;
 var newUserInfo;
 
 // firebase configuration
@@ -30,7 +31,7 @@ firebase.auth().onAuthStateChanged((user) => {
     if(user){
         database = firebase.database();
         feedRef = database.ref("feed");
-        let usersRef = database.ref("users");
+        usersRef = database.ref("users");
 
         if(authModule.checkIfNewUser()){
             let newUser = usersRef.push(); // pushes EMPTY record to database
@@ -47,19 +48,10 @@ firebase.auth().onAuthStateChanged((user) => {
             console.log("Added new user to db");
         }
 
-        // check for admin role
-        // let isAdmin = false;
-
-        // usersRef.once("value").then((snapshot) => {
-        //     snapshot.forEach((user) => {
-        //         if(user.val().Email === firebase.auth().currentUser.email){
-        //             if(user.val().role === "admin"){
-        //                 console.log("Is admin");
-        //             }
-        //         }
-        //     });
-        // });
         console.log("logged in");
+
+        // check for admin role
+        // authModule.checkForAdmin(usersRef);
     }else{
         console.log("not logged in");
     }
@@ -76,7 +68,9 @@ app.use("/", indexRoutes);
 
 // functions
 function getFeedAndRender(res){
-    console.log("IN GET FEEDS");
+    // Will redirect user to logout if user isn't admin
+    authModule.checkForAdmin(usersRef, res);
+
     database = firebase.database();
     feedRef = database.ref("feed");
     

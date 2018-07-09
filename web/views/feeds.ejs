@@ -4,20 +4,18 @@
 
 <a href="/logout">Logout</a>
 
-<div id="add-form">
-    <form action="/feeds" method="POST">
-        <input type="text" name="title" placeholder="title">
-        <!-- Using links until image upload is implemented later -->
-        <input type="text" name="image" placeholder="image">
-        <input type="text" name="description" placeholder="description">
-        <input type="number" name="score" placeholder="score">
-        <input type="date" name="date">
-        <!-- <input type="submit" value="Submit" id="submit"> -->
-        <button id="feed-butt">Submit</button>
-    </form>
-</div>
+<form action="/feeds" method="POST" id="new-item-form">
+    <input type="text" name="title" placeholder="title">
+    <!-- Using links until image upload is implemented later -->
+    <input type="text" name="image" placeholder="image">
+    <input type="number" name="score" placeholder="score">
+    <input type="date" name="date">
+    <input type="text" name="description" placeholder="description">
+    <!-- <textarea name="description" form="new-item-form">Description</textarea> -->
+    <button id="feed-butt">Submit</button>
+</form>
 
-<!-- <div class="all"> -->
+<div class="feed">
     <% posts.forEach(((post) => { %>
         <div class="item">
             <div class="title">
@@ -34,14 +32,15 @@
                 <p><%= post.val().date %></p>
             </div>
 
-            <div class="description">
-                <p><%= post.val().description %></p>
-            </div>
-
             <div class="score">
                 <p><%= post.val().score %></p>
             </div>
+
+            <div class="description">
+                <p><%= post.val().description %></p>
+            </div>
         </div>
     <% })) %>
+</div>
 
 <% include partials/footer %>

@@ -1,10 +1,14 @@
 /* Mobile first */
 html{
-    height: 500px;
+    height: 100%;
     background-color: #ccced1;
     font-size: 12pt;
     margin: 0 auto;
     box-sizing: border-box;
+}
+
+body{
+    height: 80%;
 }
 
 button{
@@ -58,5 +62,31 @@ p{
     padding: 10px;
 }
 
+.feed{
+    overflow: scroll;
+    height: 100%;
+}
+
+#new-item-form{
+    width: 60%;
+    margin: 0 auto;
+}
+
+#new-item-form input{
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    padding: 10px 0px 10px 10px;
+}
+
+#feed-butt{
+    width: 100%;
+    padding: 10px;
+}
+
 @media all and (min-width: 1024px){
+    #new-item-form{
+        width: 40%;
+    }
 }

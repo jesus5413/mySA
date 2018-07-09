@@ -5,13 +5,12 @@
 <a href="/logout">Logout</a>
 
 <form action="/feeds" method="POST" id="new-item-form">
-    <input type="text" name="title" placeholder="title">
+    <input type="text" name="title" placeholder="Title">
     <!-- Using links until image upload is implemented later -->
-    <input type="text" name="image" placeholder="image">
-    <input type="number" name="score" placeholder="score">
+    <input type="text" name="image" placeholder="Image">
+    <input type="number" name="score" placeholder="Score">
     <input type="date" name="date">
-    <input type="text" name="description" placeholder="description">
-    <!-- <textarea name="description" form="new-item-form">Description</textarea> -->
+    <textarea name="description" form="new-item-form">Description</textarea>
     <button id="feed-butt">Submit</button>
 </form>
 

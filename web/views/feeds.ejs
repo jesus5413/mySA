@@ -15,7 +15,7 @@
 </form>
 
 <div class="feed">
-    <% posts.forEach(((post) => { %>
+    <% posts.forEach((post) => { %>
         <div class="item">
             <div class="title">
                 <h2><%= post.val().title %></h2>
@@ -39,7 +39,7 @@
                 <p><%= post.val().description %></p>
             </div>
         </div>
-    <% })) %>
+    <% }) %>
 </div>
 
 <% include partials/footer %>

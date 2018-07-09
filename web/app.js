@@ -16,6 +16,7 @@ var database;
 var feedRef;
 var usersRef;
 var newUserInfo;
+const MAX_ITEMS = 20;
 
 // firebase configuration
 var config = {
@@ -74,7 +75,7 @@ function getFeedAndRender(res){
     database = firebase.database();
     feedRef = database.ref("feed");
     
-    feedRef.once("value", (snapshot) => {
+    feedRef.orderByChild("date").limitToLast(MAX_ITEMS).once("value", (snapshot) => {
         res.render("feeds", { posts: snapshot });
     });
 }

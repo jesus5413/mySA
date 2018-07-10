@@ -8,7 +8,7 @@ html{
 }
 
 body{
-    height: 80%;
+    height: 100%;
 }
 
 button{
@@ -22,8 +22,44 @@ a{
     text-decoration: none;
 }
 
-p{
+nav h2{
+    align-self: center;
+}
+
+nav a{
+    align-self: center;
+    
+}
+
+.input-container p{
     margin-top: 0px;
+}
+
+/* nav{
+    text-align: center;
+    height: 100px;
+    background-color: #ffffff;
+    width: 50%;
+    flex: 0 1 auto;
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+    margin: 0 auto;
+} */
+
+main{
+    /* position: relative; */
+   margin-top: 10px;
+   flex: 1 1 auto;
+}
+
+.item{
+    background-color: #ffffff;
+    text-align: center;
+}
+
+.item div{
+    border-bottom: 0.5px solid #000000;
 }
 
 .page-title{
@@ -60,12 +96,12 @@ p{
     height: 100%;
 }
 
-#new-item-form{
+.new-item-form{
     width: 60%;
     margin: 0 auto;
 }
 
-#new-item-form input{
+.new-item-form input{
     display: block;
     width: 100%;
     box-sizing: border-box;
@@ -75,7 +111,7 @@ p{
     color: #8e8e8e;
 }
 
-#new-item-form textarea{
+.new-item-form textarea{
     width: 100%;
     box-sizing: border-box;
     margin-bottom: 10px;
@@ -87,6 +123,15 @@ p{
 #feed-butt{
     width: 100%;
     padding: 10px;
+}
+
+#logout{
+    margin: 0 auto;
+}
+
+#feeds-page{
+    display: flex;
+    flex-flow: column;
 }
 
 @media all and (min-width: 1024px){

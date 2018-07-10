@@ -1,45 +1,50 @@
 <% include partials/header %>
+<div id="feeds-page">
+<nav>
+    <h1>Feeds</h1>
 
-<h1>Feeds</h1>
+    <a href="/logout" id="logout">Logout</a>
+</nav>
 
-<a href="/logout">Logout</a>
-
-<form action="/feeds" method="POST" id="new-item-form">
-    <input type="text" name="title" placeholder="Title">
-    <!-- Using links until image upload is implemented later -->
-    <input type="text" name="image" placeholder="Image">
-    <input type="number" name="score" placeholder="Score">
-    <input type="date" name="date">
-    <textarea name="description" form="new-item-form">Description</textarea>
-    <button id="feed-butt">Submit</button>
-</form>
-
-<div class="feed">
-    <% posts.forEach((post) => { %>
-        <div class="item">
-            <div class="title">
-                <h2><%= post.val().title %></h2>
+<main>
+    <form action="/feeds" method="POST" id="new-item-form">
+        <input type="text" name="title" placeholder="Title">
+        <!-- Using links until image upload is implemented later -->
+        <input type="text" name="image" placeholder="Image">
+        <input type="number" name="score" placeholder="Score">
+        <input type="date" name="date">
+        <textarea name="description" form="new-item-form">Description</textarea>
+        <button id="feed-butt">Submit</button>
+    </form>
+    
+    <div class="feed">
+        <% posts.forEach((post) => { %>
+            <div class="item">
+                <div class="title">
+                    <h2><%= post.val().title %></h2>
+                </div>
+    
+                <!-- Will eventually show image, but only text for now -->
+                <div class="image">
+                    <p><%= post.val().imgUrl %></p>
+                    <!-- <img src="<%= post.val().imgUrl %>" alt="Alt"> -->
+                </div>
+    
+                <div class="date">
+                    <p><%= post.val().date %></p>
+                </div>
+    
+                <div class="score">
+                    <p><%= post.val().score %></p>
+                </div>
+    
+                <div class="description">
+                    <p><%= post.val().description %></p>
+                </div>
             </div>
-
-            <!-- Will eventually show image, but only text for now -->
-            <div class="image">
-                <p><%= post.val().imgUrl %></p>
-                <!-- <img src="<%= post.val().imgUrl %>" alt="Alt"> -->
-            </div>
-
-            <div class="date">
-                <p><%= post.val().date %></p>
-            </div>
-
-            <div class="score">
-                <p><%= post.val().score %></p>
-            </div>
-
-            <div class="description">
-                <p><%= post.val().description %></p>
-            </div>
-        </div>
-    <% }) %>
+        <% }) %>
+    </div>
+</main>
 </div>
 
 <% include partials/footer %>

@@ -17,4 +17,9 @@ middlewareObj.addItem = (body, feedRef) => {
     console.log("added to db");
 }
 
+middlewareObj.deleteItem = (id, feedRef) => {
+    feedRef.child(id).remove();
+    console.log("Removed item with id", id);
+}
+
 module.exports = middlewareObj;

@@ -7,13 +7,13 @@
 </nav>
 
 <main>
-    <form action="/feeds" method="POST" id="new-item-form">
-        <input type="text" name="title" placeholder="Title">
+    <form action="/feeds" method="POST" class="new-item-form" id="new-item-form">
+        <input type="text" name="title" placeholder="Title" class="field">
         <!-- Using links until image upload is implemented later -->
-        <input type="text" name="image" placeholder="Image">
-        <input type="number" name="score" placeholder="Score">
-        <input type="date" name="date">
-        <textarea name="description" form="new-item-form">Description</textarea>
+        <input type="text" name="image" placeholder="Image" class="field">
+        <input type="number" name="score" placeholder="Score" class="field">
+        <input type="date" name="date" class="field">
+        <textarea name="description" form="new-item-form" class="field">Description</textarea>
         <button id="feed-butt">Submit</button>
     </form>
     
@@ -40,6 +40,13 @@
     
                 <div class="description">
                     <p><%= post.val().description %></p>
+                </div>
+
+                <div class="other-butts">
+                    <button id="edit-butt">Edit</button>
+                    <form action="/feeds/<%= post.key %>?_method=DELETE" method="POST">
+                        <button id="delete-butt">Delete</button>
+                    </form>
                 </div>
             </div>
         <% }) %>

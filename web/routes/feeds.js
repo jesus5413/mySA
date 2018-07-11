@@ -8,8 +8,6 @@ var database = firebase.database();
 var feedRef = database.ref("feed");
 
 function getFeedAndRender(res){
-    console.log("IN GET FEEDS");
-    
     feedRef.once("value", (snapshot) => {
         res.render("feeds", { posts: snapshot });
     });

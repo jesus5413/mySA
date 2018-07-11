@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const databaseModule = require("./public/js/database.js");
 const authModule = require("./public/js/auth.js");
+const methodOverride = require("method-override");
 
 // routes
 const indexRoutes = require("./routes/index.js");
@@ -16,6 +17,7 @@ var database;
 var feedRef;
 var usersRef;
 var newUserInfo;
+const PORT = 9000;
 const MAX_ITEMS = 20;
 
 // firebase configuration
@@ -65,6 +67,7 @@ app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "/public")));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/", indexRoutes);
+app.use(methodOverride("_method"));
 // app.use("/feeds", feedsRoutes);
 
 // functions
@@ -76,6 +79,7 @@ function getFeedAndRender(res){
     feedRef = database.ref("feed");
     
     feedRef.orderByChild("date").limitToLast(MAX_ITEMS).once("value", (snapshot) => {
+        console.log(snapshot.id);
         res.render("feeds", { posts: snapshot });
     });
 }
@@ -106,7 +110,14 @@ app.post("/feeds", authModule.isUserAuthenticated, (req, res) => {
     getFeedAndRender(res);
 });
 
+// DELETE ROUTES
+// delete a feed item
+app.delete("/feeds/:id", authModule.isUserAuthenticated, (req, res) => {
+    databaseModule.deleteItem(req.params.id, feedRef);
+    getFeedAndRender(res);
+});
+
 // initialize server
-app.listen(3000, () => {
-    console.log("Server is up");
+app.listen(PORT, () => {
+    console.log("Server is up on", PORT);
 });

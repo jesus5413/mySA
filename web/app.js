@@ -84,6 +84,10 @@ function getFeedAndRender(res){
     });
 }
 
+function redirectToGet(res){
+    res.redirect("/feeds");
+}
+
 // GET ROUTES
 // Only admin users should be able to access feeds
 app.get("/feeds", authModule.isUserAuthenticated, (req, res) => {
@@ -110,11 +114,18 @@ app.post("/feeds", authModule.isUserAuthenticated, (req, res) => {
     getFeedAndRender(res);
 });
 
+// UPDATE ROUTES
+// update a feed item
+app.put("/feeds/:id", authModule.isUserAuthenticated, (req, res) => {
+    databaseModule.updateItem(req.params.id, req.body, feedRef);
+    redirectToGet(res);
+});
+
 // DELETE ROUTES
 // delete a feed item
 app.delete("/feeds/:id", authModule.isUserAuthenticated, (req, res) => {
     databaseModule.deleteItem(req.params.id, feedRef);
-    getFeedAndRender(res);
+    redirectToGet(res);
 });
 
 // initialize server

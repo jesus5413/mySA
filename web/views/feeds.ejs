@@ -1,4 +1,5 @@
 <% include partials/header %>
+<% var id = 0; %>
 <div id="feeds-page">
 <nav>
     <h1>Feeds</h1>
@@ -11,39 +12,51 @@
         <input type="text" name="title" placeholder="Title" class="field">
         <!-- Using links until image upload is implemented later -->
         <input type="text" name="image" placeholder="Image" class="field">
-        <input type="number" name="score" placeholder="Score" class="field">
         <input type="date" name="date" class="field">
-        <textarea name="description" form="new-item-form" class="field">Description</textarea>
+        <input type="number" name="score" placeholder="Score" class="field">
+        <!-- <textarea name="description" form="new-item-form" class="field">Description</textarea> -->
         <button id="feed-butt">Submit</button>
     </form>
     
     <div class="feed">
-        <% posts.forEach((post) => { %>
+        <% posts.forEach((post) => { id = post.key;%>
+            <% let infoArr = []; %>
             <div class="item">
                 <div class="title">
                     <h2><%= post.val().title %></h2>
+                    <% infoArr.push(post.val().title); %>
                 </div>
     
                 <!-- Will eventually show image, but only text for now -->
                 <div class="image">
                     <p><%= post.val().imgUrl %></p>
+                    <% infoArr.push(post.val().imgUrl); %>
                     <!-- <img src="<%= post.val().imgUrl %>" alt="Alt"> -->
                 </div>
     
                 <div class="date">
                     <p><%= post.val().date %></p>
+                    <% infoArr.push(post.val().date); %>
                 </div>
     
                 <div class="score">
                     <p><%= post.val().score %></p>
+                    <% infoArr.push(post.val().score); %>
                 </div>
     
-                <div class="description">
+                <!-- <div class="description">
                     <p><%= post.val().description %></p>
-                </div>
+                    <% infoArr.push(post.val().description); %>
+                </div> -->
 
                 <div class="other-butts">
-                    <button id="edit-butt">Edit</button>
+                    <button class="edit-butt" 
+                        onclick="showModal('<%= infoArr[0] %>', 
+                        '<%= infoArr[1] %>',
+                        '<%= infoArr[2] %>',
+                        '<%= infoArr[3] %>',
+                        '<%= post.key %>');">
+                        Edit</button>
                     <form action="/feeds/<%= post.key %>?_method=DELETE" method="POST">
                         <button id="delete-butt">Delete</button>
                     </form>
@@ -52,6 +65,23 @@
         <% }) %>
     </div>
 </main>
+
+<!-- When user clicks on an edit button, modal popup will appear for item editing -->
+<aside id="edit-modal">
+    <div id="modal-content">
+        <span id="close">&times</span>
+        <form action="" method="POST" class="new-item-form" id="edit-item-form">
+            <input type="text" name="title" placeholder="Title" class="field">
+            <!-- Using links until image upload is implemented later -->
+            <input type="text" name="image" placeholder="Image" class="field">
+            <input type="date" name="date" class="field">
+            <input type="number" name="score" placeholder="Score" class="field">
+            <!-- <textarea name="description" form="new-item-form" class="field">Description</textarea> -->
+            <button id="edit-modal-butt">Submit</button>
+        </form>
+    </div>
+</aside>
 </div>
 
+<script src="../js/feeds.js"></script>
 <% include partials/footer %>

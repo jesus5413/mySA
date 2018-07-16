@@ -28,7 +28,6 @@ nav h2{
 
 nav a{
     align-self: center;
-    
 }
 
 .input-container p{
@@ -47,10 +46,31 @@ nav a{
     background-color: #EF7976;
 }
 
+#edit-modal{
+    display: none;
+    position: fixed;
+    z-index: 1;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+#modal-content{
+    background-color: #ffffff;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888888;
+    width: 80%;
+}
+
 nav{
     text-align: center;
     height: 100px;
-    background-color: #ffffff;
+    /* background-color: #ffffff; */
     width: 50%;
     flex: 0 1 auto;
     display: flex;

@@ -11,7 +11,7 @@ middlewareObj.addItem = (body, feedRef) => {
         date: body.date.toString(),
         score: body.score,
         imgUrl: body.image,
-        description: body.description
+        // description: body.description
     });
     
     console.log("added to db");
@@ -20,6 +20,23 @@ middlewareObj.addItem = (body, feedRef) => {
 middlewareObj.deleteItem = (id, feedRef) => {
     feedRef.child(id).remove();
     console.log("Removed item with id", id);
+}
+
+middlewareObj.updateItem = (id, body, feedRef) => {
+    let itemData = {
+        title: body.title,
+        imgUrl: body.image,
+        date: body.date,
+        score: body.score
+    };
+
+    let update = {};
+
+    update[id] = itemData;
+
+    console.log("Updated item with id", id);
+
+    return feedRef.update(update);
 }
 
 module.exports = middlewareObj;

@@ -13,6 +13,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.group.mysa.R;
 
 import org.w3c.dom.Text;
@@ -35,6 +36,14 @@ public class SignInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+
+        if(FirebaseAuth.getInstance().getCurrentUser() != null){
+            System.out.println("User has logged in before: moving them to the main app.");
+            Intent startIntent = new Intent(SignInActivity.this, MainAppHomeActivity.class);
+            startActivity(startIntent);
+            finish();
+
+        }
 
         signIn = (Button) findViewById(R.id.sign_in_button);
         signIn_signUp = (Button) findViewById(R.id.sign_in_signUp_button);

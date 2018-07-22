@@ -1,18 +1,16 @@
 package com.group.mysa.Model;
 
 public class FeedInfo {
+    private String address;
+    private String zip;
     private String date;
     private String description;
     private String imgUrl;
     private String score;
     private String title;
+    private String link;
 
     public FeedInfo() {
-//        this.date = date;
-//        this.description = description;
-//        this.imgUrl = imgUrl;
-//        this.score = score;
-//        this.title = title;
     }
 
     public String getDate() {
@@ -53,5 +51,29 @@ public class FeedInfo {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getZip() {
+        return zip;
+    }
+
+    public void setZip(String zip) {
+        this.zip = zip;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 }

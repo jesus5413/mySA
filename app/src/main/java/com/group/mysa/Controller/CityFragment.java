@@ -1,6 +1,7 @@
 package com.group.mysa.Controller;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -45,6 +46,7 @@ public class CityFragment extends Fragment {
     private DatabaseReference mDatabase;
     private FirebaseRecyclerAdapter firebaseRecyclerAdapter;
     private Query chatQuery;
+    private Intent browserIntent;
 
 
 
@@ -114,11 +116,24 @@ public class CityFragment extends Fragment {
 
         firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<FeedInfo, CityChatViewHolder>(userOption) {
             @Override
-            protected void onBindViewHolder(@NonNull CityChatViewHolder holder, int position, @NonNull FeedInfo model) {
+            protected void onBindViewHolder(@NonNull final CityChatViewHolder holder, int position, @NonNull final FeedInfo model) {
                 holder.setTitle(model.getTitle());
                 holder.setDescription(model.getDescription());
                 holder.setImage(getActivity().getApplicationContext(), model.getImgUrl());
 
+
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v){
+                        System.out.println(model.getLink());
+                        String url = model.getLink();
+                        if(!url.startsWith("https://") && !url.startsWith("http://")){
+                            url = "http://" + url;
+                        }
+                        browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                        startActivity(browserIntent);
+                    }
+
+                });
             }
 
             @NonNull

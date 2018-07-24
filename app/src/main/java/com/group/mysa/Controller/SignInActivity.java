@@ -38,7 +38,7 @@ public class SignInActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_in);
 
         if(FirebaseAuth.getInstance().getCurrentUser() != null){
-            System.out.println("User has logged in before: moving them to the main app.");
+            System.out.println("User has logged in before: moving user to the main app.");
             Intent startIntent = new Intent(SignInActivity.this, MainAppHomeActivity.class);
             startActivity(startIntent);
             finish();

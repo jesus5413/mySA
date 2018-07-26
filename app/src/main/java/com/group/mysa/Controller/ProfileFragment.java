@@ -1,13 +1,16 @@
 package com.group.mysa.Controller;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.group.mysa.R;
 
 /**
@@ -29,6 +32,11 @@ public class ProfileFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+
+
+
+    private Button signOut;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -66,7 +74,28 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        signOut = (Button) view.findViewById(R.id.sign_out);
+        signOut(signOut);
         return view;
+    }
+
+
+    /**
+     * function signs out the user when the button is clicked
+     * and sends them to the sign in viewsys
+     * @param button
+     */
+    public void signOut(Button button){
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("---------User signed out");
+                FirebaseAuth.getInstance().signOut();
+                Intent startIntent = new Intent(getActivity(), SignInActivity.class);
+                startActivity(startIntent);
+            }
+        });
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event

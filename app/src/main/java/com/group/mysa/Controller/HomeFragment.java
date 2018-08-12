@@ -110,7 +110,7 @@ public class HomeFragment extends Fragment {
         twitterView.setHasFixedSize(true);
         twitterView.setLayoutManager(new GridLayoutManager(getContext(),2));
 
-        
+
         return view;
 
     }

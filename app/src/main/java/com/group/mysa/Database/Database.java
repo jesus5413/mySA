@@ -1,9 +1,12 @@
 package com.group.mysa.Database;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.group.mysa.Model.FeedInfo;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author jesusnieto
@@ -31,6 +34,30 @@ public class Database {
         userInfo.put("UniqueID", uID);
         mDatabase.child("users").child(uID).setValue(userInfo);
     }
+
+    public static void newKeyAndValue(String uid, String postID, FeedInfo postInfo){
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(uid).child("attend");
+        Map<String, Object> attend = new HashMap<String, Object>();
+        attend.put(postID, postInfo);
+        mDatabase.updateChildren(attend);
+    }
+
+    public static void likeDBFeature(String postId, int counter){
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("feed").child(postId);
+        counter = counter + 1;
+        Map<String, Object> likes = new HashMap<>();
+        likes.put("counter", counter);
+        mDatabase.updateChildren(likes);
+    }
+
+    public static void storeLikedPosts(String uid, String postUid, FeedInfo postInfo){
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(uid).child("liked");
+        Map<String, Object> liked = new HashMap<>();
+        liked.put(postUid, postInfo);
+        mDatabase.updateChildren(liked);
+    }
+
+
 
 
 }

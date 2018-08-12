@@ -6,19 +6,24 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.group.mysa.Database.Database;
 import com.group.mysa.Model.FeedInfo;
 import com.group.mysa.R;
 import com.squareup.picasso.Picasso;
@@ -41,12 +46,14 @@ public class CityFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private OnFragmentInteractionListener mListener;
+    private String uid;
 
     private RecyclerView cityFeedList;
     private DatabaseReference mDatabase;
     private FirebaseRecyclerAdapter firebaseRecyclerAdapter;
     private Query chatQuery;
     private Intent browserIntent;
+    private Toolbar mToolBar;
 
 
 
@@ -81,6 +88,8 @@ public class CityFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
 
 
     }
@@ -94,9 +103,15 @@ public class CityFragment extends Fragment {
         mDatabase = FirebaseDatabase.getInstance().getReference().child("feed");
         mDatabase.keepSynced(true);
 
+        mToolBar = (Toolbar) view.findViewById(R.id.city_tool_bar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolBar);
+        mToolBar.setTitle("mySA");
+
         cityFeedList = (RecyclerView) view.findViewById(R.id.city_chat_recyclerView);
         cityFeedList.setHasFixedSize(true);
         cityFeedList.setLayoutManager(new LinearLayoutManager(getContext()));
+
+
 
 
         return view;
@@ -120,7 +135,35 @@ public class CityFragment extends Fragment {
                 holder.setTitle(model.getTitle());
                 holder.setDescription(model.getDescription());
                 holder.setImage(getActivity().getApplicationContext(), model.getImgUrl());
+                holder.setLikes(Integer.toString(model.getCounter()));
 
+                holder.feedback.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        System.out.println("Clicking the feedback button");
+                    }
+                });
+
+                holder.like.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        System.out.println("Clicking the like button");
+                        Database.likeDBFeature(model.getPostid(), model.getCounter());
+                        Database.storeLikedPosts(uid, model.getPostid(), model);
+
+                    }
+                });
+
+                holder.attend.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        System.out.println("Clicking the attend button: " + model.getPostid());
+                        Database.newKeyAndValue(uid,model.getPostid(),model);
+
+
+
+                    }
+                });
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v){
@@ -171,10 +214,16 @@ public class CityFragment extends Fragment {
 
     public class CityChatViewHolder extends RecyclerView.ViewHolder{
         View mView;
+        Button like;
+        Button feedback;
+        Button attend;
 
         public CityChatViewHolder(View itemView){
             super(itemView);
             mView = itemView;
+            like = (Button)mView.findViewById(R.id.like);
+            attend = (Button)mView.findViewById(R.id.attend);
+            feedback = (Button)mView.findViewById(R.id.feedback);
         }
 
         public void setTitle(String title){
@@ -191,6 +240,11 @@ public class CityFragment extends Fragment {
         public void setImage(Context ctx, String imgUrl){
             ImageView imgView = mView.findViewById(R.id.post_image);
             Picasso.get().load(imgUrl).into(imgView);
+        }
+
+        public void setLikes(String likes){
+            TextView likeCounter = mView.findViewById(R.id.likes_counter);
+            likeCounter.setText(likes);
         }
 
     }

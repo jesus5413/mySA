@@ -1,14 +1,53 @@
 package com.group.mysa.Model;
 
+import java.sql.Timestamp;
+
 public class FeedInfo {
     private String address;
     private String zip;
+    private int counter;
+    private String timestamp;
     private String date;
     private String description;
     private String imgUrl;
     private String score;
     private String title;
     private String link;
+    private String postId;
+    private String surveyUrl;
+
+    public String getSurveyUrl() {
+        return surveyUrl;
+    }
+
+    public void setSurveyUrl(String surveyUrl) {
+        this.surveyUrl = surveyUrl;
+    }
+
+    public String getPostid() {
+        return postId;
+
+    }
+
+    public void setPostid(String postid) {
+        this.postId = postid;
+    }
+
+    public int getCounter() {
+        return counter;
+    }
+
+    public void setCounter(int counter) {
+        this.counter = counter;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+    }
 
     public FeedInfo() {
     }

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -7,36 +8,75 @@
     app:cardCornerRadius="12dp"
     android:layout_margin="5dp"
     android:elevation="90dp"
+    app:cardBackgroundColor="@android:color/white"
     >
-    
+
+
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="248dp"
-        android:orientation="vertical"
-        android:background="#121111">
-        
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:scaleType="centerCrop"
-            android:id="@+id/post_image"
-            />
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:orientation="vertical">
 
         <TextView
+            android:id="@+id/post_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/post_title"
+            android:background="@android:color/white"
             android:text="Post Title"
-            android:textSize="20dp"
-            android:textColor="#ffff"/>
+            android:textColor="#000"
+            android:textSize="20dp" />
 
-         <TextView
+        <ImageView
+            android:id="@+id/post_image"
+            android:layout_width="match_parent"
+            android:layout_height="143dp"
+            android:scaleType="centerCrop" />
+
+        <TextView
             android:id="@+id/post_description"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="76dp"
+            android:background="@android:color/white"
             android:text="Post Description"
-            android:textColor="#ffff" />
+            android:textColor="#555" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/attend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Attend"
+                android:theme="@style/PrimaryFlatButton" />
+
+            <Button
+                android:id="@+id/feedback"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Feedback"
+                android:theme="@style/PrimaryFlatButton" />
+
+            <TextView
+                android:id="@+id/likes_counter"
+                android:layout_width="28dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="100dp" />
+
+            <Button
+                android:id="@+id/like"
+                android:layout_width="52dp"
+                android:layout_height="43dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/ic_star_black_24dp"
+                android:text=""
+                android:theme="@style/PrimaryFlatButton" />
 
         </LinearLayout>
+
+    </LinearLayout>
 
 </android.support.v7.widget.CardView>

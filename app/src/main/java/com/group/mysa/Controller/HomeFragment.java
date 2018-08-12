@@ -156,7 +156,7 @@ public class HomeFragment extends Fragment {
                     public void onClick(View view) {
                         System.out.println("Clicking the like button");
                         Database.likeTwitterDBFeature(model.getPostid(), model.getCounter());
-                        Database.storeLikedPosts(uid, model.getPostid(), model);
+                        Database.storeTwitterLikedPosts(uid, model.getPostid(), model);
 
                     }
                 });

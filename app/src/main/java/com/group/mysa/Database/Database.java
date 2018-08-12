@@ -65,6 +65,14 @@ public class Database {
         mDatabase.updateChildren(likes);
     }
 
+    public static void storeTwitterLikedPosts(String uid, String postUid, FeedInfo postInfo){
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(uid).child("liked");
+        Map<String, Object> liked = new HashMap<>();
+        postInfo.setTitle(postInfo.getUser());
+        liked.put(postUid, postInfo);
+        mDatabase.updateChildren(liked);
+    }
+
 
 
 

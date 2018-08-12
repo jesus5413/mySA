@@ -15,6 +15,15 @@ public class FeedInfo {
     private String link;
     private String postId;
     private String surveyUrl;
+    private String user;
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
 
     public String getSurveyUrl() {
         return surveyUrl;

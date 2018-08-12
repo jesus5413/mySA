@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -27,6 +28,10 @@ import com.group.mysa.Database.Database;
 import com.group.mysa.Model.FeedInfo;
 import com.group.mysa.R;
 import com.squareup.picasso.Picasso;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -88,7 +93,7 @@ public class CityFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
 
 
 
@@ -99,6 +104,8 @@ public class CityFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_city, container, false);
+        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("feed");
         mDatabase.keepSynced(true);
@@ -109,7 +116,7 @@ public class CityFragment extends Fragment {
 
         cityFeedList = (RecyclerView) view.findViewById(R.id.city_chat_recyclerView);
         cityFeedList.setHasFixedSize(true);
-        cityFeedList.setLayoutManager(new LinearLayoutManager(getContext()));
+        cityFeedList.setLayoutManager(new GridLayoutManager(getContext(), 2));
 
 
 
@@ -137,6 +144,10 @@ public class CityFragment extends Fragment {
                 holder.setImage(getActivity().getApplicationContext(), model.getImgUrl());
                 holder.setLikes(Integer.toString(model.getCounter()));
 
+                holder.feedback.setVisibility(View.INVISIBLE);
+
+
+
                 holder.feedback.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -159,8 +170,6 @@ public class CityFragment extends Fragment {
                     public void onClick(View view) {
                         System.out.println("Clicking the attend button: " + model.getPostid());
                         Database.newKeyAndValue(uid,model.getPostid(),model);
-
-
 
                     }
                 });

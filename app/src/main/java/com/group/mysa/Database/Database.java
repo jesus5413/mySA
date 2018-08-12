@@ -57,6 +57,14 @@ public class Database {
         mDatabase.updateChildren(liked);
     }
 
+    public static void likeTwitterDBFeature(String postId, int counter){
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("twitter").child(postId);
+        counter = counter + 1;
+        Map<String, Object> likes = new HashMap<>();
+        likes.put("counter", counter);
+        mDatabase.updateChildren(likes);
+    }
+
 
 
 

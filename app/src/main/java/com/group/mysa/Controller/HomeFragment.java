@@ -1,14 +1,33 @@
 package com.group.mysa.Controller;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.group.mysa.Database.Database;
+import com.group.mysa.Model.FeedInfo;
 import com.group.mysa.R;
+import com.squareup.picasso.Picasso;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +48,15 @@ public class HomeFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private Toolbar mToolBar;
+    private DatabaseReference mDatabase;
+    private FirebaseRecyclerAdapter firebaseRecyclerAdapter;
+    private Query chatQuery;
+    private Intent browserIntent;
+    private String uid;
+    private RecyclerView twitterView;
+
+
 
     public HomeFragment() {
         // Required empty public constructor
@@ -59,6 +87,8 @@ public class HomeFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
     @Override
@@ -66,11 +96,110 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("twitter");
+        mDatabase.keepSynced(true);
+
+        mToolBar = (Toolbar)view.findViewById(R.id.home_app_bar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolBar);
+        mToolBar.setTitle("mySA");
+
+
+        twitterView = (RecyclerView)view.findViewById(R.id.twitter_recycler_view);
+        twitterView.setHasFixedSize(true);
+        twitterView.setLayoutManager(new GridLayoutManager(getContext(),2));
+
+        
         return view;
+
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        onActivityStarted();
+        firebaseRecyclerAdapter.startListening();
+    }
+
+
+    public void onActivityStarted(){
+
+        chatQuery = mDatabase.orderByKey();
+
+
+        FirebaseRecyclerOptions<FeedInfo> userOption = new FirebaseRecyclerOptions.Builder<FeedInfo>().setQuery(chatQuery, FeedInfo.class).build();
+
+        firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<FeedInfo, TwitterChatViewHolder>(userOption) {
+            @Override
+            protected void onBindViewHolder(@NonNull final TwitterChatViewHolder holder, int position, @NonNull final FeedInfo model) {
+                holder.setTitle(model.getUser());
+                holder.setDescription(model.getDescription());
+                holder.setImage(getActivity().getApplicationContext(), model.getImgUrl());
+                holder.setLikes(Integer.toString(model.getCounter()));
+
+                holder.feedback.setVisibility(View.INVISIBLE);
+                holder.attend.setVisibility(View.INVISIBLE);
+
+
+
+                holder.feedback.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        System.out.println("Clicking the feedback button");
+                    }
+                });
+
+                holder.like.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        System.out.println("Clicking the like button");
+                        Database.likeTwitterDBFeature(model.getPostid(), model.getCounter());
+                        Database.storeLikedPosts(uid, model.getPostid(), model);
+
+                    }
+                });
+
+                holder.attend.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        System.out.println("Clicking the attend button: " + model.getPostid());
+                        Database.newKeyAndValue(uid,model.getPostid(),model);
+
+                    }
+                });
+
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v){
+                        System.out.println(model.getLink());
+                        String url = model.getLink();
+                        if(!url.startsWith("https://") && !url.startsWith("http://")){
+                            url = "http://" + url;
+                        }
+                        browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                        startActivity(browserIntent);
+                    }
+
+                });
+            }
+
+            @NonNull
+            @Override
+            public TwitterChatViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.city_chat_feed, parent, false);
+                return new TwitterChatViewHolder(view);
+            }
+        };
+
+        twitterView.setAdapter(firebaseRecyclerAdapter);
+
 
 
 
     }
+
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -110,4 +239,44 @@ public class HomeFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+
+    public class TwitterChatViewHolder extends RecyclerView.ViewHolder{
+        View mView;
+        Button like;
+        Button feedback;
+        Button attend;
+
+        public TwitterChatViewHolder(View itemView){
+            super(itemView);
+            mView = itemView;
+            like = (Button)mView.findViewById(R.id.like);
+            attend = (Button)mView.findViewById(R.id.attend);
+            feedback = (Button)mView.findViewById(R.id.feedback);
+        }
+
+        public void setTitle(String title){
+            TextView mTitle = mView.findViewById(R.id.post_title);
+            mTitle.setText(title);
+
+        }
+
+        public void setDescription(String description){
+            TextView mDescription = mView.findViewById(R.id.post_description);
+            mDescription.setText(description);
+        }
+
+        public void setImage(Context ctx, String imgUrl){
+            ImageView imgView = mView.findViewById(R.id.post_image);
+            Picasso.get().load(imgUrl).into(imgView);
+        }
+
+        public void setLikes(String likes){
+            TextView likeCounter = mView.findViewById(R.id.likes_counter);
+            likeCounter.setText(likes);
+        }
+
+    }
+
+
 }

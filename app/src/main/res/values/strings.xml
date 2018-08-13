@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">mySA</string>
-    <string name="title_activity_main_app_home">MainAppHomeActivity</string>
+    <string name="title_activity_main_app_home">mySA</string>
     <string name="title_home">Twitter</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>

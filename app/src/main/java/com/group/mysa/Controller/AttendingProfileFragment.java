@@ -2,11 +2,13 @@ package com.group.mysa.Controller;
 
 
 import android.app.DownloadManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -62,10 +64,29 @@ public class AttendingProfileFragment extends Fragment {
                 TextView textView = v.findViewById(android.R.id.text1);
                 textView.setText(model.getTitle());
 
+
+
             }
+
+
+
         };
 
         listView.setAdapter(adapter);
+
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                FeedInfo info = (FeedInfo) adapterView.getItemAtPosition(i);
+                System.out.println(info.getTitle());
+
+                Intent startIntent = new Intent(getActivity(),ItemInfo.class);
+                startIntent.putExtra("FeedInfo", info);
+                startActivity(startIntent);
+
+            }
+        });
 
         return mView;
     }

@@ -1,8 +1,9 @@
 package com.group.mysa.Model;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class FeedInfo {
+public class FeedInfo implements Serializable{
     private String address;
     private String zip;
     private int counter;

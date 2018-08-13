@@ -15,12 +15,12 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity android:name=".Controller.SignUp" />
         <activity
             android:name=".Controller.MainAppHomeActivity"
-            android:label="@string/title_activity_main_app_home"/>
+            android:label="@string/title_activity_main_app_home" />
+        <activity android:name=".Controller.ItemInfo"></activity>
     </application>
 
 </manifest>
